@@ -11,6 +11,9 @@ function App() {
   const [useVin, setUseVin] = useState(true)
   const [timeline, setTimeline] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [expandedTabs, setExpandedTabs] = useState({
+    oilChanges: false
+  })
 
   // Standard oil change interval: 5,000 miles (conservative estimate)
   const OIL_CHANGE_INTERVAL = 5000
@@ -131,6 +134,14 @@ function App() {
     setZipCode('')
     setMpg('')
     setTimeline(null)
+    setExpandedTabs({ oilChanges: false })
+  }
+
+  const toggleTab = (tabName) => {
+    setExpandedTabs(prev => ({
+      ...prev,
+      [tabName]: !prev[tabName]
+    }))
   }
 
   return (
@@ -247,66 +258,105 @@ function App() {
             </button>
           </form>
         ) : (
-          <div className="timeline">
+          <div className="timeline-results">
             <div className="timeline-header">
-              <h2>Vehicle: {timeline.vehicle}</h2>
-              <div className="stats">
-                <div className="stat">
-                  <span className="stat-label">Current Mileage</span>
-                  <span className="stat-value">{timeline.currentMileage.toLocaleString()} mi</span>
-                </div>
-                <div className="stat">
-                  <span className="stat-label">Daily Driving</span>
-                  <span className="stat-value">{timeline.dailyMileage} mi</span>
-                </div>
-                <div className="stat">
-                  <span className="stat-label">Gas Price</span>
-                  <span className="stat-value">${timeline.gasPrice.toFixed(2)}/gal</span>
-                </div>
+              <h2>{timeline.vehicle}</h2>
+              <div className="vehicle-info">
+                <span>{timeline.currentMileage.toLocaleString()} miles</span>
+                <span className="divider">•</span>
+                <span>{timeline.dailyMileage} mi/day</span>
+                <span className="divider">•</span>
+                <span>${timeline.gasPrice.toFixed(2)}/gal</span>
               </div>
             </div>
 
-            <div className="cost-section">
-              <h3>Gas Cost Estimates</h3>
-              <div className="cost-timeline">
-                <div className="cost-item">
-                  <div className="cost-period">Daily</div>
-                  <div className="cost-amount">${timeline.dailyGasCost.toFixed(2)}</div>
-                  <div className="cost-detail">{timeline.dailyMileage} miles @ {timeline.mpg} MPG</div>
-                </div>
-                <div className="cost-item">
-                  <div className="cost-period">Monthly</div>
-                  <div className="cost-amount">${timeline.monthlyGasCost.toFixed(2)}</div>
-                  <div className="cost-detail">~30 days of commuting</div>
-                </div>
-                <div className="cost-item highlight">
-                  <div className="cost-period">Yearly</div>
-                  <div className="cost-amount">${timeline.yearlyGasCost.toFixed(2)}</div>
-                  <div className="cost-detail">365 days of commuting</div>
-                </div>
-              </div>
-            </div>
-
-            <h3>Upcoming Oil Changes</h3>
-            <div className="timeline-list">
-              {timeline.oilChanges.map((change) => (
-                <div key={change.number} className="timeline-item">
-                  <div className="timeline-marker">{change.number}</div>
-                  <div className="timeline-content">
-                    <div className="timeline-date">{change.date}</div>
-                    <div className="timeline-details">
-                      <span>at {change.mileage.toLocaleString()} miles</span>
-                      <span className="timeline-days">
-                        {change.daysUntil === 0 
-                          ? 'Today!' 
-                          : change.daysUntil === 1 
-                            ? 'Tomorrow' 
-                            : `in ${change.daysUntil} days`}
-                      </span>
+            <div className="visual-timeline">
+              <div className="timeline-line">
+                <div className="timeline-track">
+                  {timeline.oilChanges.map((change, index) => (
+                    <div 
+                      key={change.number} 
+                      className="timeline-point"
+                      style={{ left: `${(index / (timeline.oilChanges.length - 1)) * 100}%` }}
+                    >
+                      <div className="point-marker"></div>
+                      <div className="point-label">
+                        <div className="point-date">{change.date.split(',')[1]?.trim() || change.date}</div>
+                        <div className="point-mileage">{change.mileage.toLocaleString()} mi</div>
+                        <div className="point-days">{change.daysUntil} days</div>
+                      </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
+                <div className="timeline-ticks">
+                  {timeline.oilChanges.map((change, index) => (
+                    <div 
+                      key={`tick-${change.number}`}
+                      className="tick-mark"
+                      style={{ left: `${(index / (timeline.oilChanges.length - 1)) * 100}%` }}
+                    >
+                      <div className="tick-line"></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="maintenance-tabs">
+              <button 
+                className={`tab-header ${expandedTabs.oilChanges ? 'expanded' : ''}`}
+                onClick={() => toggleTab('oilChanges')}
+              >
+                <span className="tab-icon">🔧</span>
+                <span className="tab-title">Oil Changes</span>
+                <span className="tab-count">{timeline.oilChanges.length} scheduled</span>
+                <span className="tab-arrow">{expandedTabs.oilChanges ? '▼' : '▶'}</span>
+              </button>
+              
+              {expandedTabs.oilChanges && (
+                <div className="tab-content">
+                  {timeline.oilChanges.map((change) => (
+                    <div key={change.number} className="maintenance-item">
+                      <div className="item-marker">{change.number}</div>
+                      <div className="item-content">
+                        <div className="item-title">Oil Change #{change.number}</div>
+                        <div className="item-date">{change.date}</div>
+                        <div className="item-details">
+                          <span>{change.mileage.toLocaleString()} miles</span>
+                          <span className="item-days">
+                            {change.daysUntil === 0 
+                              ? 'Today!' 
+                              : change.daysUntil === 1 
+                                ? 'Tomorrow' 
+                                : `${change.daysUntil} days away`}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="cost-summary">
+              <h3>Cost Summary</h3>
+              <div className="cost-grid">
+                <div className="cost-box">
+                  <div className="cost-label">Daily</div>
+                  <div className="cost-value">${timeline.dailyGasCost.toFixed(2)}</div>
+                </div>
+                <div className="cost-box">
+                  <div className="cost-label">Monthly</div>
+                  <div className="cost-value">${timeline.monthlyGasCost.toFixed(2)}</div>
+                </div>
+                <div className="cost-box highlight">
+                  <div className="cost-label">Yearly</div>
+                  <div className="cost-value">${timeline.yearlyGasCost.toFixed(2)}</div>
+                </div>
+              </div>
+              <div className="cost-note">
+                Based on {timeline.dailyMileage} miles/day @ {timeline.mpg} MPG
+              </div>
             </div>
 
             <button className="reset-btn" onClick={resetForm}>
