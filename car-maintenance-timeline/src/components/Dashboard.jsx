@@ -4,6 +4,7 @@ import { insforge } from '../lib/insforge';
 import { VehicleCard } from './VehicleCard';
 import { VehicleForm } from './VehicleForm';
 import { SettingsPanel } from './SettingsPanel';
+import { RepairShops } from './RepairShops';
 
 export function Dashboard() {
   const { user, signOut } = useAuth();
@@ -446,6 +447,25 @@ function VehicleDetail({ vehicle, onBack }) {
                   Based on {timeline.dailyMileage} miles/day @ {timeline.mpg} MPG @ ${timeline.gasPrice.toFixed(2)}/gal
                 </div>
               </div>
+            </div>
+          )}
+        </div>
+
+        {/* Repair Shops Tab */}
+        <div className="maintenance-tabs">
+          <button
+            className={`tab-header ${expandedTabs.repairShops ? 'expanded' : ''}`}
+            onClick={() => toggleTab('repairShops')}
+          >
+            <span className="tab-icon">🏪</span>
+            <span className="tab-title">Auto Repair Shops Near Me</span>
+            <span className="tab-count">AI Powered</span>
+            <span className="tab-arrow">{expandedTabs.repairShops ? '▼' : '▶'}</span>
+          </button>
+
+          {expandedTabs.repairShops && (
+            <div className="tab-content">
+              <RepairShops zipCode={vehicle.zip_code} />
             </div>
           )}
         </div>

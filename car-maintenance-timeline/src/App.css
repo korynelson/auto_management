@@ -835,6 +835,253 @@ select:focus {
   margin-top: 0;
 }
 
+/* Repair Shops */
+.repair-shops-intro {
+  text-align: center;
+  padding: 2rem;
+}
+
+.repair-shops-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.repair-shops-intro h3 {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.repair-shops-intro p {
+  color: #666;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.repair-shops-loading {
+  text-align: center;
+  padding: 3rem;
+}
+
+.repair-shops-loading p {
+  color: #666;
+  margin-top: 1rem;
+}
+
+.repair-shops-error {
+  text-align: center;
+  padding: 2rem;
+}
+
+.repair-shops-list {
+  padding: 0.5rem;
+}
+
+.repair-shops-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.repair-shops-header h3 {
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.refresh-btn {
+  background: var(--theme-primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.refresh-btn:hover {
+  filter: brightness(1.1);
+}
+
+.repair-shop-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  border-left: 4px solid var(--theme-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s;
+}
+
+.repair-shop-card:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.shop-header {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.shop-rank {
+  width: 32px;
+  height: 32px;
+  background: var(--theme-gradient);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.shop-info {
+  flex: 1;
+}
+
+.shop-name {
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+.shop-rating {
+  font-size: 0.9rem;
+}
+
+.rating-number {
+  color: #666;
+  margin-left: 0.25rem;
+}
+
+.shop-details {
+  margin-bottom: 1rem;
+}
+
+.detail-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.detail-icon {
+  font-size: 1rem;
+}
+
+.detail-row.no-phone {
+  opacity: 0.7;
+}
+
+.phone-missing {
+  font-style: italic;
+  font-size: 0.85rem;
+}
+
+.shop-specialties {
+  margin-bottom: 1rem;
+}
+
+.shop-specialties h5,
+.shop-pricing h5,
+.shop-reviews h5 {
+  font-size: 0.85rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.specialty-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.specialty-tag {
+  background: #f0f2ff;
+  color: var(--theme-primary);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.shop-pricing {
+  margin-bottom: 1rem;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.pricing-item {
+  background: #f8f9fa;
+  padding: 0.75rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.pricing-service {
+  display: block;
+  font-size: 0.75rem;
+  color: #666;
+  margin-bottom: 0.25rem;
+}
+
+.pricing-value {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.shop-reviews {
+  background: #f8f9fa;
+  padding: 0.875rem;
+  border-radius: 8px;
+}
+
+.shop-reviews p {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.repair-shops-disclaimer {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: #fffbeb;
+  border-radius: 8px;
+  border: 1px solid #fcd34d;
+}
+
+.repair-shops-disclaimer small {
+  color: #92400e;
+}
+
+@media (max-width: 640px) {
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .repair-shops-header {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+}
+
 /* Theme Selector */
 .theme-selector {
   margin-bottom: 1.5rem;
