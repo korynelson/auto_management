@@ -6,6 +6,7 @@ import { VehicleForm } from './VehicleForm';
 import { SettingsPanel } from './SettingsPanel';
 import { RepairShops } from './RepairShops';
 import { CostChart } from './CostChart';
+import { MaintenanceSchedule } from './MaintenanceSchedule';
 
 export function Dashboard() {
   const { user, signOut } = useAuth();
@@ -98,7 +99,9 @@ export function Dashboard() {
     <div className="dashboard">
       <header className="dashboard-header">
         <div className="header-content">
-          <h1>My Garage</h1>
+          <div className="brand-logo">
+            <img src="/logo.png" alt="KARROS AI" className="logo-image" />
+          </div>
           <div className="user-menu">
             <span className="user-name">{user?.profile?.name || user?.email}</span>
             <button className="signout-btn" onClick={signOut}>Sign Out</button>
@@ -110,6 +113,12 @@ export function Dashboard() {
             onClick={() => setActiveTab('vehicles')}
           >
             My Vehicles
+          </button>
+          <button 
+            className={activeTab === 'maintenance' ? 'active' : ''}
+            onClick={() => setActiveTab('maintenance')}
+          >
+            Maintenance Schedule
           </button>
           <button 
             className={activeTab === 'settings' ? 'active' : ''}
@@ -144,9 +153,9 @@ export function Dashboard() {
                   <div className="loading">Loading your vehicles...</div>
                 ) : vehicles.length === 0 ? (
                   <div className="empty-state">
-                    <div className="empty-icon">🚗</div>
-                    <h3>No vehicles yet</h3>
-                    <p>Add your first vehicle to start tracking maintenance</p>
+                    <img src="/logo.png" alt="KARROS AI" className="empty-logo" />
+                    <h3>Welcome to KARROS AI</h3>
+                    <p>Add your first vehicle to start tracking maintenance with AI-powered insights</p>
                     <button className="submit-btn" onClick={() => setShowAddForm(true)}>
                       Add Your First Vehicle
                     </button>
@@ -168,6 +177,8 @@ export function Dashboard() {
             )}
           </>
         )}
+
+        {activeTab === 'maintenance' && <MaintenanceSchedule vehicles={vehicles} />}
 
         {activeTab === 'settings' && <SettingsPanel />}
       </main>

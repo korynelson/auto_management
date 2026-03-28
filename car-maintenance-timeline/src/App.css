@@ -293,8 +293,41 @@ body {
   margin-bottom: 1.5rem;
 }
 
+.brand-logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-image {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
+}
+
 .header-content h1 {
   font-size: 1.75rem;
+}
+
+/* Auth Branding */
+.auth-brand {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.auth-logo-image {
+  height: 80px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Empty State Logo */
+.empty-logo {
+  height: 100px;
+  width: auto;
+  object-fit: contain;
+  margin-bottom: 1rem;
 }
 
 .user-menu {
@@ -654,6 +687,506 @@ select:focus {
   color: #4b5563;
 }
 
+/* Maintenance Schedule */
+.maintenance-schedule {
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.schedule-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.schedule-header h2 {
+  margin: 0;
+  color: #333;
+}
+
+.schedule-summary {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.total-cost {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--theme-primary);
+}
+
+.schedule-period {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.gantt-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.gantt-week {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+.week-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.week-label {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.week-cost {
+  font-weight: 600;
+  color: var(--theme-primary);
+  font-size: 1.1rem;
+}
+
+.week-content {
+  padding: 1rem 1.25rem;
+}
+
+.no-maintenance {
+  color: #9ca3af;
+  font-style: italic;
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.vehicle-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.vehicle-row:last-child {
+  border-bottom: none;
+}
+
+.vehicle-name {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+.maintenance-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-left: 0.5rem;
+}
+
+.maintenance-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  border: 1px solid;
+}
+
+.maintenance-item.routine {
+  background: #d1fae5;
+  border-color: #10b981;
+  color: #065f46;
+}
+
+.maintenance-item.major {
+  background: #fef3c7;
+  border-color: #f59e0b;
+  color: #92400e;
+}
+
+.maintenance-item.critical {
+  background: #fee2e2;
+  border-color: #ef4444;
+  color: #991b1b;
+}
+
+.item-type {
+  font-weight: 500;
+}
+
+.item-date {
+  opacity: 0.8;
+  font-size: 0.75rem;
+}
+
+.item-cost {
+  font-weight: 600;
+  margin-left: 0.25rem;
+}
+
+.schedule-legend {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  justify-content: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legend-dot.routine {
+  background: #10b981;
+}
+
+.legend-dot.major {
+  background: #f59e0b;
+}
+
+.legend-dot.critical {
+  background: #ef4444;
+}
+
+/* Gantt Chart Styles */
+.gantt-container {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.gantt-header {
+  display: flex;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e5e7eb;
+  font-weight: 600;
+  min-width: max-content;
+}
+
+.gantt-label-col {
+  width: 120px;
+  padding: 0.5rem 0.75rem;
+  border-right: 1px solid #e5e7eb;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  left: 0;
+  background: #f8f9fa;
+  z-index: 10;
+}
+
+.gantt-weeks {
+  display: flex;
+}
+
+.gantt-week-col {
+  width: 60px;
+  padding: 0.35rem 0.25rem;
+  text-align: center;
+  border-right: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.gantt-week-col:last-child {
+  border-right: none;
+}
+
+.week-label {
+  font-size: 0.75rem;
+  color: #374151;
+  font-weight: 600;
+}
+
+.week-dates {
+  font-size: 0.65rem;
+  color: #6b7280;
+  margin-top: 0.1rem;
+}
+
+.gantt-body {
+  max-height: 250px;
+  overflow-y: auto;
+  min-width: max-content;
+}
+
+.gantt-row {
+  display: flex;
+  border-bottom: 1px solid #f3f4f6;
+  min-height: 36px;
+}
+
+.gantt-row:last-child {
+  border-bottom: none;
+}
+
+.gantt-row .gantt-label-col {
+  background: #fafafa;
+  position: sticky;
+  left: 0;
+  z-index: 10;
+}
+
+.row-vehicle {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gantt-row .gantt-week-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
+  position: relative;
+  padding: 0.2rem;
+}
+
+.gantt-week-col.has-task {
+  background: #f0fdf4;
+}
+
+.gantt-bar {
+  width: 100%;
+  height: 24px;
+  padding: 0.1rem 0.2rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.15rem;
+  white-space: nowrap;
+}
+
+.gantt-bar.routine {
+  background: #10b981;
+  color: white;
+}
+
+.gantt-bar.major {
+  background: #f59e0b;
+  color: white;
+}
+
+.gantt-bar.critical {
+  background: #ef4444;
+  color: white;
+}
+
+.bar-count {
+  font-weight: 700;
+  font-size: 0.75rem;
+  min-width: 14px;
+  text-align: center;
+  background: rgba(255,255,255,0.3);
+  border-radius: 3px;
+  padding: 0 0.1rem;
+}
+
+.bar-cost {
+  font-weight: 600;
+  font-size: 0.65rem;
+}
+
+.gantt-empty {
+  padding: 2rem;
+  text-align: center;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* Schedule Controls */
+.schedule-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.time-frame-selector {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.time-frame-btn {
+  padding: 0.4rem 0.75rem;
+  border: 1px solid #d1d5db;
+  background: white;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #374151;
+}
+
+.time-frame-btn:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.time-frame-btn.active {
+  background: var(--theme-primary);
+  color: white;
+  border-color: var(--theme-primary);
+}
+
+.time-frame-btn:focus-visible,
+.vehicle-filter-btn:focus-visible,
+.category-filter-btn:focus-visible {
+  outline: 2px solid var(--theme-primary);
+  outline-offset: 2px;
+}
+
+.column-width-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.column-width-control input[type="range"] {
+  width: 100px;
+  cursor: pointer;
+}
+
+/* Vehicle Filter */
+.vehicle-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  flex-wrap: wrap;
+}
+
+.filter-label {
+  font-size: 0.85rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.vehicle-filter-btn {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid #d1d5db;
+  background: white;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #374151;
+}
+
+.vehicle-filter-btn:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.vehicle-filter-btn.active {
+  background: var(--theme-primary);
+  color: white;
+  border-color: var(--theme-primary);
+}
+
+/* Category Filter */
+.category-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0;
+  flex-wrap: wrap;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 0.5rem;
+}
+
+.category-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid #d1d5db;
+  background: white;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #374151;
+}
+
+.category-filter-btn:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.category-filter-btn .filter-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.category-filter-btn.routine .filter-dot {
+  background: #10b981;
+}
+
+.category-filter-btn.major .filter-dot {
+  background: #f59e0b;
+}
+
+.category-filter-btn.critical .filter-dot {
+  background: #ef4444;
+}
+
+.category-filter-btn.active.routine {
+  background: #d1fae5;
+  border-color: #10b981;
+  color: #065f46;
+}
+
+.category-filter-btn.active.major {
+  background: #fef3c7;
+  border-color: #f59e0b;
+  color: #92400e;
+}
+
+.category-filter-btn.active.critical {
+  background: #fee2e2;
+  border-color: #ef4444;
+  color: #991b1b;
+}
+
 /* Visual Timeline */
 .visual-timeline {
   margin-bottom: 2.5rem;
@@ -794,8 +1327,7 @@ select:focus {
 .tab-count {
   font-size: 0.8rem;
   opacity: 0.7;
-  background: var(--theme-primary);
-  background-opacity: 0.1;
+  background: rgba(102, 126, 234, 0.1);
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
 }

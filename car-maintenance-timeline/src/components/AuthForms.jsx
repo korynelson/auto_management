@@ -24,6 +24,9 @@ export function SignInForm({ onToggle }) {
 
   return (
     <div className="auth-form-container">
+      <div className="auth-brand">
+        <img src="/logo.png" alt="KARROS AI" className="auth-logo-image" />
+      </div>
       <h2>Sign In</h2>
       {error && <div className="auth-error">{error}</div>}
       <form onSubmit={handleSubmit}>
@@ -115,6 +118,9 @@ export function SignUpForm({ onToggle }) {
   if (step === 'verify') {
     return (
       <div className="auth-form-container">
+        <div className="auth-brand">
+          <img src="/logo.png" alt="KARROS AI" className="auth-logo-image" />
+        </div>
         <h2>Verify Your Email</h2>
         <p className="auth-instructions">
           We've sent a 6-digit verification code to <strong>{email}</strong>.<br />
@@ -152,6 +158,9 @@ export function SignUpForm({ onToggle }) {
 
   return (
     <div className="auth-form-container">
+      <div className="auth-brand">
+        <img src="/logo.png" alt="KARROS AI" className="auth-logo-image" />
+      </div>
       <h2>Create Account</h2>
       {error && <div className="auth-error">{error}</div>}
       <form onSubmit={handleSubmit}>
