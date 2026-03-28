@@ -229,7 +229,9 @@ export function VehicleForm({ onSubmit, onCancel, vehicle }) {
       // Tire data
       tire_rotation_interval: formData.last_tire_rotation ? parseInt(formData.tire_rotation_interval) || 7500 : null,
       last_tire_rotation: formData.last_tire_rotation || null,
-      tire_pressure_check: formData.tire_pressure_check
+      tire_pressure_check: formData.tire_pressure_check,
+      // Include ID for edit mode
+      ...(isEditMode && vehicle?.id ? { id: vehicle.id } : {})
     };
 
     try {

@@ -159,27 +159,41 @@ const generateReviews = (index) => {
 export function RepairShops({ zipCode }) {
   const [shops, setShops] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingStep, setLoadingStep] = useState('');
   const [error, setError] = useState('');
 
   const findShops = async () => {
     setLoading(true);
+    setLoadingStep('Looking up your location...');
     setError('');
+    
+    // Add timeout for the entire operation
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Request timed out')), 30000)
+    );
     
     try {
       // Step 1: Get location from ZIP code
-      const location = await getLocationFromZip(zipCode);
+      const location = await Promise.race([
+        getLocationFromZip(zipCode),
+        timeoutPromise
+      ]);
+      
       if (!location) {
         setError('Could not find location for this ZIP code.');
         setLoading(false);
         return;
       }
       
+      setLoadingStep('Searching for auto repair shops...');
+      
       // Step 2: Search for repair shops
-      const { overpass, nominatim } = await searchRepairShops(
-        location.latitude, 
-        location.longitude,
-        location.city
-      );
+      const { overpass, nominatim } = await Promise.race([
+        searchRepairShops(location.latitude, location.longitude, location.city),
+        timeoutPromise
+      ]);
+      
+      setLoadingStep('Processing results...');
       
       // Step 3: Format the results
       const formattedShops = formatShops(overpass, nominatim, location.city, location.state);
@@ -192,10 +206,15 @@ export function RepairShops({ zipCode }) {
       
     } catch (err) {
       console.error('Error:', err);
-      setError('Failed to find repair shops. Please try again.');
+      if (err.message === 'Request timed out') {
+        setError('Search took too long. Please try again or check your connection.');
+      } else {
+        setError('Failed to find repair shops. Please try again.');
+      }
     }
     
     setLoading(false);
+    setLoadingStep('');
   };
 
   if (!shops && !loading) {
@@ -215,7 +234,9 @@ export function RepairShops({ zipCode }) {
     return (
       <div className="repair-shops-loading">
         <div className="spinner"></div>
-        <p>Finding the best auto repair shops in your area...</p>
+        <p className="loading-main">Finding the best auto repair shops in your area...</p>
+        <p className="loading-step">{loadingStep}</p>
+        <small className="loading-hint">This may take up to 30 seconds</small>
       </div>
     );
   }
