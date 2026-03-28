@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 
 // Service cost mapping
 const SERVICE_COSTS = {
@@ -84,7 +84,7 @@ export function MaintenanceSchedule({ vehicles, compact = false }) {
           vehicleId: vehicle.id,
           type: 'Oil & filter change',
           date: oilChangeDate,
-          weekIndex: Math.min(weekIndex, 3),
+          weekIndex: Math.min(weekIndex, maxWeeks - 1),
           cost: SERVICE_COSTS['Oil & filter change'] || 75,
           category: 'routine'
         });
@@ -104,7 +104,7 @@ export function MaintenanceSchedule({ vehicles, compact = false }) {
           vehicleId: vehicle.id,
           type: 'Tire rotation',
           date: tireRotationDate,
-          weekIndex: Math.min(weekIndex, 3),
+          weekIndex: Math.min(weekIndex, maxWeeks - 1),
           cost: SERVICE_COSTS['Tire rotation'] || 45,
           category: 'routine'
         });
@@ -130,7 +130,7 @@ export function MaintenanceSchedule({ vehicles, compact = false }) {
                 vehicleId: vehicle.id,
                 type: service,
                 date: serviceDate,
-                weekIndex: Math.min(weekIndex, 3),
+                weekIndex: Math.min(weekIndex, maxWeeks - 1),
                 cost: SERVICE_COSTS[service] || 50,
                 category: getCategoryForService(service)
               });
@@ -162,10 +162,18 @@ export function MaintenanceSchedule({ vehicles, compact = false }) {
     );
   }
 
-  const [selectedVehicles, setSelectedVehicles] = useState(() => 
-    [...new Set(scheduleData.items.map(item => item.vehicleId))]
-  );
+  const [selectedVehicles, setSelectedVehicles] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState(['routine', 'major', 'critical']);
+
+  // Update selected vehicles when schedule data changes (new vehicles added)
+  useEffect(() => {
+    const vehicleIds = [...new Set(scheduleData.items.map(item => item.vehicleId))];
+    setSelectedVehicles(prev => {
+      // Keep existing selections and add any new vehicles
+      const newIds = vehicleIds.filter(id => !prev.includes(id));
+      return [...prev, ...newIds];
+    });
+  }, [scheduleData.items]);
 
   const toggleVehicle = (vehicleId) => {
     setSelectedVehicles(prev => 
