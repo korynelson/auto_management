@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-export function VehicleForm({ onSubmit, onCancel }) {
+export function VehicleForm({ onSubmit, onCancel, vehicle }) {
+  const isEditMode = !!vehicle;
   const [useVin, setUseVin] = useState(true);
   const [activeSection, setActiveSection] = useState('basic');
   const [loading, setLoading] = useState(false);
@@ -20,6 +21,26 @@ export function VehicleForm({ onSubmit, onCancel }) {
     last_tire_rotation: '',
     tire_pressure_check: 'monthly'
   });
+
+  useEffect(() => {
+    if (vehicle) {
+      setUseVin(!!vehicle.vin);
+      setFormData({
+        name: vehicle.name || '',
+        vin: vehicle.vin || '',
+        model: vehicle.model || '',
+        current_mileage: vehicle.current_mileage?.toString() || '',
+        daily_commute: vehicle.daily_commute?.toString() || '',
+        zip_code: vehicle.zip_code || '',
+        mpg: vehicle.mpg?.toString() || '25',
+        last_oil_change: vehicle.last_oil_change || '',
+        oil_change_interval: vehicle.oil_change_interval?.toString() || '5000',
+        tire_rotation_interval: vehicle.tire_rotation_interval?.toString() || '7500',
+        last_tire_rotation: vehicle.last_tire_rotation || '',
+        tire_pressure_check: vehicle.tire_pressure_check || 'monthly'
+      });
+    }
+  }, [vehicle]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,7 +68,11 @@ export function VehicleForm({ onSubmit, onCancel }) {
       tire_pressure_check: formData.tire_pressure_check
     };
 
-    await onSubmit(vehicleData);
+    if (isEditMode) {
+      await onSubmit({ ...vehicleData, id: vehicle.id });
+    } else {
+      await onSubmit(vehicleData);
+    }
     setLoading(false);
   };
 
@@ -243,7 +268,7 @@ export function VehicleForm({ onSubmit, onCancel }) {
 
   return (
     <div className="form-container">
-      <h2>Add New Vehicle</h2>
+      <h2>{isEditMode ? 'Edit Vehicle' : 'Add New Vehicle'}</h2>
       
       <div className="form-section-tabs">
         <button
@@ -279,7 +304,7 @@ export function VehicleForm({ onSubmit, onCancel }) {
             Cancel
           </button>
           <button type="submit" className="submit-btn" disabled={loading}>
-            {loading ? 'Adding...' : 'Add Vehicle'}
+            {loading ? (isEditMode ? 'Saving...' : 'Adding...') : (isEditMode ? 'Save Changes' : 'Add Vehicle')}
           </button>
         </div>
       </form>

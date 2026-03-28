@@ -1,78 +1,122 @@
 import { useState, useMemo } from 'react';
 
+// Service cost mapping
+const SERVICE_COSTS = {
+  // Routine
+  'Oil & filter change': 75,
+  'Tire rotation': 45,
+  'Multi-point inspection': 0,
+  'Fluid level checks': 0,
+  // Major
+  'Cabin air filter': 35,
+  'Front axle inspection': 60,
+  'Engine air filter': 40,
+  'Belt & hose inspection': 50,
+  'Spark plug inspection': 80,
+  'Brake fluid check': 30,
+  'Transmission fluid check': 60,
+  // Critical
+  'Spark plugs replacement': 250,
+  'Brake fluid flush': 120,
+  'Engine coolant flush': 150,
+  'Accessory drive belt inspect': 40,
+  'Timing belt inspection': 100,
+  'Timing belt replacement': 800,
+  'Water pump inspection': 80,
+  'Transmission fluid': 200,
+  'Transfer case fluid': 120,
+  'Axle lubricants': 90,
+  'Accessory belt replace': 180
+};
+
 export function CostChart({ timeline }) {
-  const [timeRange, setTimeRange] = useState('1year'); // 1month, 3months, 6months, 1year, 2years
+  const [timeRange, setTimeRange] = useState('1year');
+  const [selectedCategories, setSelectedCategories] = useState({
+    all: true,
+    gas: true,
+    routine: true,
+    major: true,
+    critical: true
+  });
 
-  const chartData = useMemo(() => {
-    if (!timeline) return [];
+  const { chartData, maxValue } = useMemo(() => {
+    if (!timeline) return { chartData: [], maxValue: 0 };
 
-    const data = [];
     const today = new Date();
-    let months = 12;
+    let totalDays = 365;
     
     switch (timeRange) {
-      case '1month': months = 1; break;
-      case '3months': months = 3; break;
-      case '6months': months = 6; break;
-      case '1year': months = 12; break;
-      case '2years': months = 24; break;
-      default: months = 12;
+      case '1month': totalDays = 30; break;
+      case '3months': totalDays = 90; break;
+      case '6months': totalDays = 180; break;
+      case '1year': totalDays = 365; break;
+      case '2years': totalDays = 730; break;
+      default: totalDays = 365;
     }
 
-    // Calculate cumulative costs over time
-    let cumulativeGas = 0;
-    let cumulativeMaintenance = 0;
-
-    for (let i = 0; i <= months; i++) {
-      const date = new Date(today);
-      date.setMonth(date.getMonth() + i);
-      
-      // Monthly gas cost
-      const monthlyGas = timeline.monthlyGasCost || 0;
-      cumulativeGas += monthlyGas;
-
-      // Check for maintenance events this month
-      let monthlyMaintenance = 0;
-      
-      // Oil changes
-      if (timeline.oilChanges) {
-        timeline.oilChanges.forEach(change => {
-          const changeDate = new Date(change.date);
-          if (changeDate.getMonth() === date.getMonth() && 
-              changeDate.getFullYear() === date.getFullYear()) {
-            monthlyMaintenance += 60; // Average oil change cost
-          }
+    // Build a map of day -> maintenance costs by type for that day
+    const maintenanceByDay = new Map();
+    
+    if (timeline.serviceMilestones) {
+      timeline.serviceMilestones.forEach(milestone => {
+        // Skip events outside our time range
+        if (milestone.daysUntil > totalDays) return;
+        
+        const day = milestone.daysUntil;
+        const dayCosts = maintenanceByDay.get(day) || { routine: 0, major: 0, critical: 0, total: 0 };
+        
+        milestone.services.forEach(service => {
+          const cost = SERVICE_COSTS[service.name] || 50;
+          dayCosts[service.type] += cost;
+          dayCosts.total += cost;
         });
-      }
-
-      // Tire rotations
-      if (timeline.tireRotations) {
-        timeline.tireRotations.forEach(rotation => {
-          const rotationDate = new Date(rotation.date);
-          if (rotationDate.getMonth() === date.getMonth() && 
-              rotationDate.getFullYear() === date.getFullYear()) {
-            monthlyMaintenance += 40; // Average tire rotation cost
-          }
-        });
-      }
-
-      cumulativeMaintenance += monthlyMaintenance;
-
-      data.push({
-        month: date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' }),
-        gas: cumulativeGas,
-        maintenance: cumulativeMaintenance,
-        total: cumulativeGas + cumulativeMaintenance
+        
+        maintenanceByDay.set(day, dayCosts);
       });
     }
 
-    return data;
-  }, [timeline, timeRange]);
+    // Generate daily data points - every day
+    const dataPoints = [];
+    const monthlyGasCost = timeline.monthlyGasCost || 0;
+    const dailyGasCost = monthlyGasCost / 30;
+    
+    let cumulativeGas = 0;
+    let cumulativeRoutine = 0;
+    let cumulativeMajor = 0;
+    let cumulativeCritical = 0;
+    
+    for (let day = 0; day <= totalDays; day++) {
+      // Calculate gas cost for this day (with inflation)
+      const inflationFactor = 1 + (day / 30) * 0.005;
+      const dailyGas = dailyGasCost * inflationFactor;
+      cumulativeGas += dailyGas;
+      
+      // Add maintenance costs if any occur on this day
+      const dayMaint = maintenanceByDay.get(day) || { routine: 0, major: 0, critical: 0, total: 0 };
+      cumulativeRoutine += dayMaint.routine;
+      cumulativeMajor += dayMaint.major;
+      cumulativeCritical += dayMaint.critical;
+      
+      const date = new Date(today);
+      date.setDate(date.getDate() + day);
+      
+      dataPoints.push({
+        dayOffset: day,
+        date: date,
+        gas: cumulativeGas,
+        routine: cumulativeRoutine,
+        major: cumulativeMajor,
+        critical: cumulativeCritical,
+        maintenance: cumulativeRoutine + cumulativeMajor + cumulativeCritical,
+        total: cumulativeGas + cumulativeRoutine + cumulativeMajor + cumulativeCritical,
+        dailyMaint: dayMaint.total
+      });
+    }
 
-  const maxValue = useMemo(() => {
-    if (chartData.length === 0) return 0;
-    return Math.max(...chartData.map(d => d.total));
-  }, [chartData]);
+    const maxVal = Math.max(...dataPoints.map(d => d.total));
+
+    return { chartData: dataPoints, maxValue: maxVal };
+  }, [timeline, timeRange]);
 
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('en-US', {
@@ -86,7 +130,7 @@ export function CostChart({ timeline }) {
   if (chartData.length === 0) return null;
 
   const chartHeight = 200;
-  const chartWidth = chartData.length > 1 ? 100 / (chartData.length - 1) : 100;
+  const totalDays = chartData[chartData.length - 1]?.dayOffset || 365;
 
   return (
     <div className="cost-chart-container">
@@ -112,20 +156,61 @@ export function CostChart({ timeline }) {
       </div>
 
       <div className="chart-legend">
-        <div className="legend-item">
+        <button 
+          className={`legend-btn ${selectedCategories.all ? 'active' : ''}`}
+          onClick={() => {
+            const newAll = !selectedCategories.all;
+            setSelectedCategories({
+              all: newAll,
+              gas: newAll,
+              routine: newAll,
+              major: newAll,
+              critical: newAll
+            });
+          }}
+        >
+          <span className="legend-color all"></span>
+          <span>All</span>
+        </button>
+        <button 
+          className={`legend-btn ${selectedCategories.gas ? 'active' : ''}`}
+          onClick={() => setSelectedCategories(prev => ({ ...prev, gas: !prev.gas, all: false }))}
+        >
           <span className="legend-color gas"></span>
           <span>Fuel</span>
-        </div>
-        <div className="legend-item">
-          <span className="legend-color maintenance"></span>
-          <span>Maintenance</span>
-        </div>
+        </button>
+        <button 
+          className={`legend-btn ${selectedCategories.routine ? 'active' : ''}`}
+          onClick={() => setSelectedCategories(prev => ({ ...prev, routine: !prev.routine, all: false }))}
+        >
+          <span className="legend-color routine"></span>
+          <span>Routine</span>
+        </button>
+        <button 
+          className={`legend-btn ${selectedCategories.major ? 'active' : ''}`}
+          onClick={() => setSelectedCategories(prev => ({ ...prev, major: !prev.major, all: false }))}
+        >
+          <span className="legend-color major"></span>
+          <span>Major</span>
+        </button>
+        <button 
+          className={`legend-btn ${selectedCategories.critical ? 'active' : ''}`}
+          onClick={() => setSelectedCategories(prev => ({ ...prev, critical: !prev.critical, all: false }))}
+        >
+          <span className="legend-color critical"></span>
+          <span>Critical</span>
+        </button>
         <div className="legend-item total">
-          <span>Total: {formatCurrency(chartData[chartData.length - 1]?.total || 0)}</span>
+          <span>Total: {formatCurrency(
+            (selectedCategories.gas ? chartData[chartData.length - 1]?.gas : 0) +
+            (selectedCategories.routine ? chartData[chartData.length - 1]?.routine : 0) +
+            (selectedCategories.major ? chartData[chartData.length - 1]?.major : 0) +
+            (selectedCategories.critical ? chartData[chartData.length - 1]?.critical : 0)
+          )}</span>
         </div>
       </div>
 
-      <div className="chart-wrapper">
+      <div className="bar-chart-wrapper">
         {/* Y-axis labels */}
         <div className="y-axis">
           {[...Array(5)].map((_, i) => {
@@ -138,8 +223,8 @@ export function CostChart({ timeline }) {
           })}
         </div>
 
-        {/* Chart area */}
-        <div className="chart-area">
+        {/* Bar Chart */}
+        <div className="bar-chart-area">
           {/* Grid lines */}
           <div className="grid-lines">
             {[...Array(5)].map((_, i) => (
@@ -147,99 +232,56 @@ export function CostChart({ timeline }) {
             ))}
           </div>
 
-          {/* SVG Chart */}
-          <svg viewBox={`0 0 100 ${chartHeight}`} preserveAspectRatio="none" className="chart-svg">
-            {/* Gradient definitions */}
-            <defs>
-              <linearGradient id="gasGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#667eea" stopOpacity="0.3" />
-                <stop offset="100%" stopColor="#667eea" stopOpacity="0.05" />
-              </linearGradient>
-              <linearGradient id="maintenanceGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.3" />
-                <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.05" />
-              </linearGradient>
-            </defs>
-
-            {/* Gas area */}
-            <path
-              d={`
-                M 0,${chartHeight}
-                ${chartData.map((d, i) => {
-                  const x = i * chartWidth;
-                  const y = chartHeight - (d.gas / maxValue) * chartHeight;
-                  return `L ${x},${y}`;
-                }).join(' ')}
-                L 100,${chartHeight}
-                Z
-              `}
-              fill="url(#gasGradient)"
-            />
-
-            {/* Maintenance area */}
-            <path
-              d={`
-                M 0,${chartHeight}
-                ${chartData.map((d, i) => {
-                  const x = i * chartWidth;
-                  const y = chartHeight - (d.total / maxValue) * chartHeight;
-                  return `L ${x},${y}`;
-                }).join(' ')}
-                L 100,${chartHeight}
-                Z
-              `}
-              fill="url(#maintenanceGradient)"
-            />
-
-            {/* Total line */}
-            <path
-              d={chartData.map((d, i) => {
-                const x = i * chartWidth;
-                const y = chartHeight - (d.total / maxValue) * chartHeight;
-                return `${i === 0 ? 'M' : 'L'} ${x},${y}`;
-              }).join(' ')}
-              fill="none"
-              stroke="#333"
-              strokeWidth="0.5"
-            />
-
-            {/* Gas line */}
-            <path
-              d={chartData.map((d, i) => {
-                const x = i * chartWidth;
-                const y = chartHeight - (d.gas / maxValue) * chartHeight;
-                return `${i === 0 ? 'M' : 'L'} ${x},${y}`;
-              }).join(' ')}
-              fill="none"
-              stroke="#667eea"
-              strokeWidth="0.8"
-            />
-
-            {/* Data points */}
-            {chartData.map((d, i) => {
-              const x = i * chartWidth;
-              const y = chartHeight - (d.total / maxValue) * chartHeight;
+          {/* Bars */}
+          <div className="bars-container">
+            {chartData.filter((_, i) => i % Math.ceil(chartData.length / 50) === 0).map((d, i) => {
+              // Calculate visible total for scaling
+              const visibleTotal = 
+                (selectedCategories.gas ? d.gas : 0) +
+                (selectedCategories.routine ? d.routine : 0) +
+                (selectedCategories.major ? d.major : 0) +
+                (selectedCategories.critical ? d.critical : 0);
+              
+              // Calculate max visible total across all days for proper scaling
+              const maxVisibleTotal = Math.max(...chartData.map(day => 
+                (selectedCategories.gas ? day.gas : 0) +
+                (selectedCategories.routine ? day.routine : 0) +
+                (selectedCategories.major ? day.major : 0) +
+                (selectedCategories.critical ? day.critical : 0)
+              ));
+              
+              const scale = maxVisibleTotal > 0 ? 100 / maxVisibleTotal : 0;
+              
               return (
-                <circle
-                  key={i}
-                  cx={x}
-                  cy={y}
-                  r="1"
-                  fill="#333"
-                />
+                <div key={i} className="cost-bar">
+                  {selectedCategories.gas && (
+                    <div className="bar-segment gas" style={{ height: `${d.gas * scale}%` }} />
+                  )}
+                  {selectedCategories.routine && (
+                    <div className="bar-segment routine" style={{ height: `${d.routine * scale}%` }} />
+                  )}
+                  {selectedCategories.major && (
+                    <div className="bar-segment major" style={{ height: `${d.major * scale}%` }} />
+                  )}
+                  {selectedCategories.critical && (
+                    <div className="bar-segment critical" style={{ height: `${d.critical * scale}%` }} />
+                  )}
+                </div>
               );
             })}
-          </svg>
-
-          {/* X-axis labels */}
-          <div className="x-axis">
-            {chartData.filter((_, i) => i % Math.ceil(chartData.length / 6) === 0 || i === chartData.length - 1).map((d, i) => (
-              <div key={i} className="x-axis-label">
-                {d.month}
-              </div>
-            ))}
           </div>
         </div>
+      </div>
+
+      {/* X-axis labels */}
+      <div className="bar-chart-x-axis">
+        {chartData
+          .filter((d) => d.dayOffset % Math.ceil(totalDays / 6) === 0 || d.dayOffset === totalDays)
+          .map((d, i) => (
+            <div key={i} className="x-axis-label">
+              {d.date.toLocaleDateString('en-US', { month: 'short' })}
+            </div>
+          ))}
       </div>
     </div>
   );

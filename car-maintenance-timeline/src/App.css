@@ -410,6 +410,32 @@ body {
   font-size: 1.1rem;
 }
 
+.vehicle-card-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.edit-btn {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.edit-btn:hover {
+  background: #e8f4f8;
+  color: #2a9d8f;
+}
+
 .delete-btn {
   background: none;
   border: none;
@@ -1138,9 +1164,35 @@ select:focus {
 
 .chart-legend {
   display: flex;
-  gap: 1.5rem;
+  gap: 0.75rem;
   margin-bottom: 1rem;
   flex-wrap: wrap;
+  align-items: center;
+}
+
+.legend-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  background: #f5f5f5;
+  border: 2px solid transparent;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.legend-btn:hover {
+  background: #e8e8e8;
+}
+
+.legend-btn.active {
+  background: white;
+  border-color: var(--theme-primary);
+  color: var(--theme-primary);
 }
 
 .legend-item {
@@ -1155,6 +1207,7 @@ select:focus {
   margin-left: auto;
   font-weight: 600;
   color: #333;
+  font-size: 0.9rem;
 }
 
 .legend-color {
@@ -1169,6 +1222,109 @@ select:focus {
 
 .legend-color.maintenance {
   background: #f59e0b;
+}
+
+.legend-color.routine {
+  background: #10b981;
+}
+
+.legend-color.major {
+  background: #f59e0b;
+}
+
+.legend-color.critical {
+  background: #ef4444;
+}
+
+.legend-color.all {
+  background: linear-gradient(135deg, #667eea 25%, #10b981 25%, #10b981 50%, #f59e0b 50%, #f59e0b 75%, #ef4444 75%);
+}
+
+.legend-step {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #f59e0b;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px #f59e0b;
+}
+
+/* Bar Chart Styles */
+.bar-chart-wrapper {
+  display: flex;
+  gap: 0.75rem;
+  height: 250px;
+}
+
+.bar-chart-area {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.bars-container {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1px;
+  padding: 0 0.5rem;
+}
+
+.cost-bar {
+  flex: 1;
+  display: flex;
+  flex-direction: column-reverse;
+  min-width: 2px;
+  max-width: 8px;
+  height: 100%;
+  position: relative;
+}
+
+.bar-segment {
+  width: 100%;
+  transition: opacity 0.2s;
+}
+
+.bar-segment:hover {
+  opacity: 0.8;
+}
+
+.bar-segment.gas {
+  background: #667eea;
+}
+
+.bar-segment.routine {
+  background: #10b981;
+}
+
+.bar-segment.major {
+  background: #f59e0b;
+}
+
+.bar-segment.critical {
+  background: #ef4444;
+}
+
+.bar-chart-x-axis {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 50px;
+  padding-top: 0.5rem;
+  font-size: 0.7rem;
+  color: #999;
+}
+
+@media (max-width: 640px) {
+  .bar-chart-wrapper {
+    height: 200px;
+  }
+  
+  .cost-bar {
+    min-width: 1px;
+    max-width: 4px;
+  }
 }
 
 .chart-wrapper {
@@ -1307,6 +1463,175 @@ select:focus {
 .theme-option.active .theme-name {
   color: var(--theme-primary);
   font-weight: 600;
+}
+
+/* Service Milestones */
+.service-milestones {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.milestones-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.milestones-header h3 {
+  font-size: 1.1rem;
+  color: #333;
+  margin: 0;
+}
+
+.service-filter-tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.service-filter-tabs button {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.875rem;
+  background: #f5f5f5;
+  border: 2px solid transparent;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.service-filter-tabs button:hover {
+  background: #e8e8e8;
+}
+
+.service-filter-tabs button.active {
+  background: white;
+  border-color: var(--theme-primary);
+  color: var(--theme-primary);
+}
+
+.filter-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.filter-dot.all {
+  background: linear-gradient(135deg, #10b981 0%, #f59e0b 50%, #ef4444 100%);
+}
+
+.filter-dot.routine {
+  background: #10b981;
+}
+
+.filter-dot.major {
+  background: #f59e0b;
+}
+
+.filter-dot.critical {
+  background: #ef4444;
+}
+
+.milestones-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.milestone-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+  transition: all 0.2s;
+}
+
+.milestone-row:hover {
+  background: #f0f2ff;
+}
+
+.milestone-mileage {
+  min-width: 100px;
+  font-weight: 600;
+  color: #333;
+  font-size: 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.milestone-eta {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #999;
+}
+
+.milestone-services {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.service-tag {
+  padding: 0.4rem 0.75rem;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.service-tag.routine {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.service-tag.major {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.service-tag.critical {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.no-milestones {
+  text-align: center;
+  padding: 2rem;
+  color: #999;
+  font-style: italic;
+}
+
+@media (max-width: 640px) {
+  .milestones-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .milestone-row {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .milestone-mileage {
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+  }
 }
 
 /* Cost Summary */

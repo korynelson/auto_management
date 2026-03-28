@@ -1,4 +1,4 @@
-export function VehicleCard({ vehicle, onClick, onDelete }) {
+export function VehicleCard({ vehicle, onClick, onDelete, onEdit }) {
   const handleDelete = (e) => {
     e.stopPropagation();
     if (confirm('Are you sure you want to delete this vehicle?')) {
@@ -6,11 +6,19 @@ export function VehicleCard({ vehicle, onClick, onDelete }) {
     }
   };
 
+  const handleEdit = (e) => {
+    e.stopPropagation();
+    onEdit();
+  };
+
   return (
     <div className="vehicle-card" onClick={onClick}>
       <div className="vehicle-card-header">
         <h3>{vehicle.name}</h3>
-        <button className="delete-btn" onClick={handleDelete}>×</button>
+        <div className="vehicle-card-actions">
+          <button className="edit-btn" onClick={handleEdit}>✎</button>
+          <button className="delete-btn" onClick={handleDelete}>×</button>
+        </div>
       </div>
       <div className="vehicle-card-details">
         <div className="detail-row">
