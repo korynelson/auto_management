@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { AuthProvider, useAuth } from './hooks/useAuth.jsx';
+import { ThemeProvider, useTheme } from './hooks/useTheme.jsx';
 import { SignInForm, SignUpForm } from './components/AuthForms';
 import { Dashboard } from './components/Dashboard';
 import './App.css';
 
 function AppContent() {
-  const { isLoaded, isSignedIn } = useAuth();
+  const { isLoaded: authLoaded, isSignedIn } = useAuth();
+  const { isLoaded: themeLoaded } = useTheme();
   const [showSignUp, setShowSignUp] = useState(false);
 
-  if (!isLoaded) {
+  if (!authLoaded || !themeLoaded) {
     return (
       <div className="app loading-screen">
         <div className="spinner"></div>
@@ -44,7 +46,9 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <ThemeProvider>
+        <AppContent />
+      </ThemeProvider>
     </AuthProvider>
   );
 }

@@ -1,11 +1,36 @@
 import { useAuth } from '../hooks/useAuth.jsx';
+import { useTheme } from '../hooks/useTheme.jsx';
 
 export function SettingsPanel() {
   const { user } = useAuth();
+  const { currentTheme, themes, setTheme } = useTheme();
 
   return (
     <div className="settings-panel">
       <h2>Settings</h2>
+      
+      <div className="settings-section">
+        <h3>Appearance</h3>
+        <div className="theme-selector">
+          <label className="theme-label">Choose Theme</label>
+          <div className="theme-options">
+            {Object.entries(themes).map(([key, theme]) => (
+              <button
+                key={key}
+                className={`theme-option ${currentTheme === key ? 'active' : ''}`}
+                onClick={() => setTheme(key)}
+                title={theme.name}
+              >
+                <div 
+                  className="theme-preview" 
+                  style={{ background: theme.gradient }}
+                />
+                <span className="theme-name">{theme.name}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
       
       <div className="settings-section">
         <h3>Account Information</h3>
@@ -29,7 +54,6 @@ export function SettingsPanel() {
           <li>Notification preferences</li>
           <li>Maintenance reminders</li>
           <li>Gas price alerts</li>
-          <li>Theme preferences</li>
         </ul>
       </div>
 
