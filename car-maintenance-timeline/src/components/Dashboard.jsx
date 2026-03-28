@@ -5,6 +5,7 @@ import { VehicleCard } from './VehicleCard';
 import { VehicleForm } from './VehicleForm';
 import { SettingsPanel } from './SettingsPanel';
 import { RepairShops } from './RepairShops';
+import { CostChart } from './CostChart';
 
 export function Dashboard() {
   const { user, signOut } = useAuth();
@@ -284,6 +285,9 @@ function VehicleDetail({ vehicle, onBack }) {
             <span>${timeline.gasPrice.toFixed(2)}/gal</span>
           </div>
         </div>
+
+        {/* Cost Chart */}
+        <CostChart timeline={timeline} />
 
         {/* Engine Tab */}
         <div className="maintenance-tabs">

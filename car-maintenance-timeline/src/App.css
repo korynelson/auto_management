@@ -1082,6 +1082,174 @@ select:focus {
   }
 }
 
+/* Cost Chart */
+.cost-chart-container {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.chart-header h3 {
+  font-size: 1.1rem;
+  color: #333;
+  margin: 0;
+}
+
+.time-range-selector {
+  display: flex;
+  gap: 0.25rem;
+  background: #f0f0f0;
+  padding: 0.25rem;
+  border-radius: 8px;
+}
+
+.time-range-btn {
+  background: transparent;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.time-range-btn:hover {
+  color: #333;
+}
+
+.time-range-btn.active {
+  background: white;
+  color: var(--theme-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.chart-legend {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.legend-item.total {
+  margin-left: auto;
+  font-weight: 600;
+  color: #333;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.legend-color.gas {
+  background: #667eea;
+}
+
+.legend-color.maintenance {
+  background: #f59e0b;
+}
+
+.chart-wrapper {
+  display: flex;
+  gap: 0.75rem;
+  height: 250px;
+}
+
+.y-axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: #999;
+  text-align: right;
+  min-width: 45px;
+}
+
+.y-axis-label {
+  line-height: 1;
+}
+
+.chart-area {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.grid-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.grid-line {
+  border-top: 1px dashed #e0e0e0;
+  height: 0;
+}
+
+.chart-svg {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+}
+
+.x-axis {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 0.5rem;
+  font-size: 0.7rem;
+  color: #999;
+}
+
+.x-axis-label {
+  text-align: center;
+  flex: 1;
+}
+
+@media (max-width: 640px) {
+  .chart-wrapper {
+    height: 200px;
+  }
+  
+  .chart-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .time-range-btn {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+  }
+}
+
 /* Theme Selector */
 .theme-selector {
   margin-bottom: 1.5rem;
