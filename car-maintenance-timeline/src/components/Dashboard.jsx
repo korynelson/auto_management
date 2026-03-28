@@ -35,12 +35,22 @@ export function Dashboard() {
   };
 
   const handleAddVehicle = async (vehicleData) => {
+    console.log('Adding vehicle:', vehicleData);
+    // Remove gas_price_source as it's not in the database schema
+    const { gas_price_source, ...dataToInsert } = vehicleData;
     const { data, error } = await insforge.database
       .from('vehicles')
-      .insert([{ ...vehicleData, user_id: user.id }])
+      .insert([{ ...dataToInsert, user_id: user.id }])
       .select();
     
-    if (!error && data) {
+    if (error) {
+      console.error('Error adding vehicle:', error);
+      alert('Error adding vehicle: ' + error.message);
+      return { data, error };
+    }
+    
+    if (data) {
+      console.log('Vehicle added:', data);
       setVehicles([data[0], ...vehicles]);
       setShowAddForm(false);
     }

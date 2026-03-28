@@ -176,9 +176,31 @@ export function VehicleForm({ onSubmit, onCancel, vehicle }) {
     }
   }, [formData.zip_code]);
 
+  const [error, setError] = useState(null);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
+
+    // Validate required fields
+    if (!formData.name || !formData.current_mileage || !formData.daily_commute || !formData.zip_code) {
+      setError('Please fill in all required fields');
+      setLoading(false);
+      return;
+    }
+
+    if (useVin && !formData.vin) {
+      setError('Please enter a VIN number');
+      setLoading(false);
+      return;
+    }
+
+    if (!useVin && !formData.model) {
+      setError('Please enter a vehicle model');
+      setLoading(false);
+      return;
+    }
 
     // Use fetched gas price or generate mock
     let gasPrice, gasPriceSource;
@@ -201,7 +223,6 @@ export function VehicleForm({ onSubmit, onCancel, vehicle }) {
       zip_code: formData.zip_code,
       mpg: parseFloat(formData.mpg) || 25,
       gas_price: gasPrice,
-      gas_price_source: gasPriceSource,
       // Engine data
       last_oil_change: formData.last_oil_change || null,
       oil_change_interval: parseInt(formData.oil_change_interval) || 5000,
@@ -211,10 +232,13 @@ export function VehicleForm({ onSubmit, onCancel, vehicle }) {
       tire_pressure_check: formData.tire_pressure_check
     };
 
-    if (isEditMode) {
-      await onSubmit({ ...vehicleData, id: vehicle.id });
-    } else {
-      await onSubmit(vehicleData);
+    try {
+      const result = await onSubmit(vehicleData);
+      if (result?.error) {
+        setError(result.error.message || 'Failed to save vehicle');
+      }
+    } catch (err) {
+      setError(err.message || 'An unexpected error occurred');
     }
     setLoading(false);
   };
@@ -421,6 +445,19 @@ export function VehicleForm({ onSubmit, onCancel, vehicle }) {
   return (
     <div className="form-container">
       <h2>{isEditMode ? 'Edit Vehicle' : 'Add New Vehicle'}</h2>
+      
+      {error && (
+        <div className="form-error" style={{ 
+          background: '#fee2e2', 
+          color: '#991b1b', 
+          padding: '0.75rem', 
+          borderRadius: '8px', 
+          marginBottom: '1rem',
+          border: '1px solid #fecaca'
+        }}>
+          {error}
+        </div>
+      )}
       
       <div className="form-section-tabs">
         <button
