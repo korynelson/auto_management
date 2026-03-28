@@ -23,7 +23,7 @@ function AppContent() {
     return (
       <div className="app">
         <header className="header">
-          <h1>Car Maintenance Timeline</h1>
+          <h1>KARROS AI</h1>
           <p>Track your oil changes and fuel costs</p>
         </header>
         <main className="main">

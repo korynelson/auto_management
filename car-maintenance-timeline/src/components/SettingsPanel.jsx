@@ -60,7 +60,7 @@ export function SettingsPanel() {
       <div className="settings-section">
         <h3>About</h3>
         <p className="settings-info">
-          Car Maintenance Timeline v1.0<br />
+          KARROS AI v1.0<br />
           Track your vehicle maintenance and fuel costs.
         </p>
       </div>
