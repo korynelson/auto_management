@@ -11,7 +11,7 @@ body {
 }
 
 .app {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 2rem 1rem;
   min-height: 100vh;
@@ -40,40 +40,107 @@ body {
   flex: 1;
 }
 
-/* Form Styles */
-.form {
+/* Loading Screen */
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Auth Forms */
+.auth-form-container {
   background: white;
   padding: 2rem;
   border-radius: 16px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  margin: 0 auto;
 }
 
-.input-toggle {
-  display: flex;
-  gap: 0.5rem;
+.auth-form-container h2 {
+  text-align: center;
   margin-bottom: 1.5rem;
+  color: #333;
 }
 
-.input-toggle button {
-  flex: 1;
+.auth-error {
+  background: #fee;
+  color: #c33;
   padding: 0.75rem;
-  border: 2px solid #e0e0e0;
-  background: white;
   border-radius: 8px;
-  cursor: pointer;
+  margin-bottom: 1rem;
   font-size: 0.9rem;
-  font-weight: 500;
-  transition: all 0.2s;
 }
 
-.input-toggle button.active {
-  background: #667eea;
-  color: white;
-  border-color: #667eea;
-}
-
-.input-group {
+.auth-success {
+  text-align: center;
+  color: #2a9d8f;
+  background: #e8f5f3;
+  padding: 0.75rem;
+  border-radius: 8px;
   margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.auth-instructions {
+  text-align: center;
+  color: #666;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.auth-instructions strong {
+  color: #333;
+}
+
+.auth-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.link-divider {
+  color: #ccc;
+}
+
+.auth-toggle {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: #667eea;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* Form Styles */
+.input-group {
+  margin-bottom: 1.25rem;
 }
 
 .input-group label {
@@ -105,6 +172,30 @@ body {
   font-size: 0.8rem;
 }
 
+.input-toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.input-toggle button {
+  flex: 1;
+  padding: 0.75rem;
+  border: 2px solid #e0e0e0;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.input-toggle button.active {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+
 .submit-btn {
   width: 100%;
   padding: 1rem;
@@ -128,12 +219,274 @@ body {
   cursor: not-allowed;
 }
 
-/* Timeline Results Styles */
-.timeline-results {
+.cancel-btn {
+  padding: 1rem 1.5rem;
+  background: #f0f0f0;
+  color: #666;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.cancel-btn:hover {
+  background: #e0e0e0;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-actions .submit-btn {
+  flex: 1;
+}
+
+/* Dashboard */
+.dashboard {
   background: white;
-  padding: 2rem;
   border-radius: 16px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  min-height: 600px;
+  overflow: hidden;
+}
+
+.dashboard-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.5rem 2rem;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.header-content h1 {
+  font-size: 1.75rem;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-name {
+  opacity: 0.9;
+  font-size: 0.9rem;
+}
+
+.signout-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.2s;
+}
+
+.signout-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.dashboard-nav {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.dashboard-nav button {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: none;
+  padding: 0.625rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.dashboard-nav button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dashboard-nav button.active {
+  background: white;
+  color: #667eea;
+}
+
+.dashboard-content {
+  padding: 2rem;
+}
+
+.dashboard-actions {
+  margin-bottom: 1.5rem;
+}
+
+.add-vehicle-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.875rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.add-vehicle-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #666;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+  margin-bottom: 1.5rem;
+}
+
+/* Vehicles Grid */
+.vehicles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.vehicle-card {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.vehicle-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  border-color: #667eea;
+}
+
+.vehicle-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.vehicle-card-header h3 {
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.delete-btn:hover {
+  background: #fee;
+  color: #c33;
+}
+
+.vehicle-card-details {
+  margin-bottom: 1rem;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.detail-label {
+  color: #666;
+}
+
+.detail-value {
+  color: #333;
+  font-weight: 500;
+}
+
+.vehicle-card-footer {
+  text-align: right;
+}
+
+.view-timeline {
+  color: #667eea;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* Form Container */
+.form-container {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+.form-container h2 {
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+/* Vehicle Detail */
+.vehicle-detail {
+  padding: 2rem;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: #667eea;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+  padding: 0;
+}
+
+.back-btn:hover {
+  text-decoration: underline;
+}
+
+/* Timeline Results */
+.timeline-results {
+  background: white;
+  border-radius: 12px;
 }
 
 .timeline-header {
@@ -466,23 +819,84 @@ body {
   color: #666;
 }
 
-.reset-btn {
-  width: 100%;
-  padding: 1rem;
-  background: #f0f0f0;
+/* Settings Panel */
+.settings-panel {
+  max-width: 600px;
+}
+
+.settings-panel h2 {
+  margin-bottom: 1.5rem;
   color: #333;
-  border: none;
-  border-radius: 8px;
+}
+
+.settings-section {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.settings-section:last-child {
+  border-bottom: none;
+}
+
+.settings-section h3 {
+  color: #667eea;
   font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
+  margin-bottom: 1rem;
 }
 
-.reset-btn:hover {
-  background: #e0e0e0;
+.settings-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f0f0f0;
 }
 
+.settings-item:last-child {
+  border-bottom: none;
+}
+
+.settings-item label {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.settings-value {
+  color: #333;
+  font-weight: 500;
+}
+
+.settings-placeholder {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.settings-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.settings-list li {
+  padding: 0.5rem 0;
+  color: #666;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.settings-list li::before {
+  content: '•';
+  color: #667eea;
+  position: absolute;
+  left: 0.5rem;
+}
+
+.settings-info {
+  color: #666;
+  line-height: 1.6;
+}
+
+/* Footer */
 .footer {
   text-align: center;
   margin-top: 1.5rem;
@@ -491,15 +905,39 @@ body {
   font-size: 0.875rem;
 }
 
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+}
+
 /* Responsive */
 @media (max-width: 640px) {
   .app {
     padding: 1rem;
   }
   
-  .form,
-  .timeline-results {
-    padding: 1.5rem;
+  .dashboard-header {
+    padding: 1.25rem;
+  }
+  
+  .header-content {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .dashboard-content {
+    padding: 1.25rem;
+  }
+  
+  .vehicles-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .cost-grid {
+    grid-template-columns: 1fr;
   }
   
   .timeline-line {
@@ -518,6 +956,15 @@ body {
     min-width: 600px;
   }
   
+  .vehicle-info {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .vehicle-info .divider {
+    display: none;
+  }
+  
   .tab-header {
     padding: 0.875rem 1rem;
   }
@@ -530,16 +977,7 @@ body {
     padding: 0.875rem;
   }
   
-  .cost-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .vehicle-info {
+  .form-actions {
     flex-direction: column;
-    gap: 0.25rem;
-  }
-  
-  .vehicle-info .divider {
-    display: none;
   }
 }
