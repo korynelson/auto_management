@@ -135,7 +135,21 @@ export function CostChart({ timeline }) {
   return (
     <div className="cost-chart-container">
       <div className="chart-header">
-        <h3>Estimated Costs Over Time</h3>
+        <div className="chart-title-section">
+          <h3>Estimated Costs Over Time</h3>
+          {timeline.gasPrice && (
+            <div className="gas-price-info">
+              <span className="gas-price-value">${timeline.gasPrice.toFixed(2)}/gal</span>
+              {timeline.gasPriceSource && (
+                <span className={`gas-price-source ${timeline.gasPriceSource}`}>
+                  {timeline.gasPriceSource === 'api' && '✓ Real-time'}
+                  {timeline.gasPriceSource === 'regional_estimate' && 'Regional avg'}
+                  {timeline.gasPriceSource === 'estimate' && 'Estimated'}
+                </span>
+              )}
+            </div>
+          )}
+        </div>
         <div className="time-range-selector">
           {[
             { key: '1month', label: '1M' },

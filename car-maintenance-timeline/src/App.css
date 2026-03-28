@@ -179,6 +179,25 @@ body {
   font-size: 0.8rem;
 }
 
+.input-group small.gas-price-loading {
+  color: var(--theme-primary);
+  font-style: italic;
+}
+
+.input-group small.gas-price-found {
+  color: #10b981;
+  font-weight: 500;
+}
+
+.input-group small.gas-price-found.real-time {
+  color: #059669;
+  font-weight: 600;
+}
+
+.input-group small.gas-price-found.estimate {
+  color: #f59e0b;
+}
+
 .input-toggle {
   display: flex;
   gap: 0.5rem;
@@ -603,6 +622,36 @@ select:focus {
 
 .vehicle-info .divider {
   color: #ccc;
+}
+
+.gas-price-with-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.price-badge {
+  padding: 0.15rem 0.4rem;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.price-badge.api {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.price-badge.regional_estimate {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.price-badge.estimate {
+  background: #e5e7eb;
+  color: #4b5563;
 }
 
 /* Visual Timeline */
@@ -1124,6 +1173,50 @@ select:focus {
   margin-bottom: 1rem;
   flex-wrap: wrap;
   gap: 1rem;
+}
+
+.chart-title-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.chart-title-section h3 {
+  margin: 0;
+}
+
+.gas-price-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.gas-price-value {
+  font-weight: 600;
+  color: #333;
+}
+
+.gas-price-source {
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.gas-price-source.api {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.gas-price-source.regional_estimate {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.gas-price-source.estimate {
+  background: #e5e7eb;
+  color: #4b5563;
 }
 
 .chart-header h3 {

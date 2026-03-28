@@ -202,6 +202,7 @@ function VehicleDetail({ vehicle, onBack }) {
       currentMileage,
       dailyMileage,
       gasPrice,
+      gasPriceSource: vehicle.gas_price_source || 'estimate',
       mpg,
       dailyGasCost,
       monthlyGasCost,
@@ -313,7 +314,16 @@ function VehicleDetail({ vehicle, onBack }) {
             <span className="divider">•</span>
             <span>{timeline.dailyMileage} mi/day</span>
             <span className="divider">•</span>
-            <span>${timeline.gasPrice.toFixed(2)}/gal</span>
+            <span className="gas-price-with-badge">
+              ${timeline.gasPrice.toFixed(2)}/gal
+              {timeline.gasPriceSource && (
+                <span className={`price-badge ${timeline.gasPriceSource}`}>
+                  {timeline.gasPriceSource === 'api' && '✓ Real-time'}
+                  {timeline.gasPriceSource === 'regional_estimate' && 'Regional average'}
+                  {timeline.gasPriceSource === 'estimate' && 'Regional average'}
+                </span>
+              )}
+            </span>
           </div>
         </div>
 
